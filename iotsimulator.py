@@ -1,5 +1,3 @@
-#!/usr/bin/python
-
 '''
 To generate <number> JSON data: 
 $ ./iotsimulator.py <number>
@@ -68,26 +66,26 @@ iotmsg_data ="""\
 
 ##### Generate JSON output:
 if __name__ == "__main__":
-	for counter in range(0, num_msgs):#10
-		rand_num = str(random.randrange(0, 9)) + str(random.randrange(0, 9))#46
-		rand_letter = random.choice(letters)#P
-		temp_init_weight = random.uniform(-5, 5)#3
-		temp_delta = random.uniform(-1, 1)#1
+	for counter in range(0, num_msgs):
+		rand_num = str(random.randrange(0, 9)) + str(random.randrange(0, 9))
+		rand_letter = random.choice(letters)
+		temp_init_weight = random.uniform(-5, 5)
+		temp_delta = random.uniform(-1, 1)
 
-		guid = guid_base + rand_num + rand_letter # 0-ZZZ12345678-46P
-		state = random.choice(temp_base.keys()) #NV
+		guid = guid_base + rand_num + rand_letter
+		state = random.choice(temp_base.keys()) 
 
-		if (not guid in device_state_map): # first entry
-			device_state_map[guid] = state #NV
-			current_temp[guid] = temp_base[state] + temp_init_weight	 #52.9
+		if (not guid in device_state_map): 
+			device_state_map[guid] = state 
+			current_temp[guid] = temp_base[state] + temp_init_weight
 			
-		elif (not device_state_map[guid] == state):		# The guid already exists but the randomly chosen state doesn't match
+		elif (not device_state_map[guid] == state):
 			state = device_state_map[guid]
 
-		temperature = current_temp[guid] + temp_delta #53.9
-		current_temp[guid] = temperature  # update current temperature#53.9	
-		today = datetime.datetime.today() #19092021110102
-		datestr = today.isoformat()#19092021110102
+		temperature = current_temp[guid] + temp_delta 
+		current_temp[guid] = temperature
+		today = datetime.datetime.today()
+		datestr = today.isoformat()
 
 		print re.sub(r"[\s+]", "", iotmsg_header) % (guid, destination, state),
 		print re.sub(r"[\s+]", "", iotmsg_eventTime) % (datestr),
