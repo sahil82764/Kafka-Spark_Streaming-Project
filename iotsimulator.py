@@ -1,9 +1,3 @@
-'''
-To generate <number> JSON data: 
-$ ./iotsimulator.py <number>
-
-'''
-
 import sys
 import datetime
 import random
@@ -14,7 +8,7 @@ import copy
 
 # Set number of simulated messages to generate
 if len(sys.argv) > 1:
-  num_msgs = int(sys.argv[1])#10
+  num_msgs = int(sys.argv[1])
 else:
   num_msgs = 1
 
@@ -73,7 +67,7 @@ if __name__ == "__main__":
 		temp_delta = random.uniform(-1, 1)
 
 		guid = guid_base + rand_num + rand_letter
-		state = random.choice(temp_base.keys()) 
+		state = random.choice(list(temp_base.keys())) 
 
 		if (not guid in device_state_map): 
 			device_state_map[guid] = state 
@@ -87,7 +81,7 @@ if __name__ == "__main__":
 		today = datetime.datetime.today()
 		datestr = today.isoformat()
 
-		print re.sub(r"[\s+]", "", iotmsg_header) % (guid, destination, state),
-		print re.sub(r"[\s+]", "", iotmsg_eventTime) % (datestr),
-		print re.sub(r"[\s+]", "", iotmsg_payload) % (format),
-		print re.sub(r"[\s+]", "", iotmsg_data) % (temperature)
+		print (re.sub(r"[\s+]", "", iotmsg_header) % (guid, destination, state))
+		print (re.sub(r"[\s+]", "", iotmsg_eventTime) % (datestr))
+		print (re.sub(r"[\s+]", "", iotmsg_payload) % (format))
+		print (re.sub(r"[\s+]", "", iotmsg_data) % (temperature))

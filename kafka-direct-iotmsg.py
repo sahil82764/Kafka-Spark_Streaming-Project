@@ -1,18 +1,21 @@
 from __future__ import print_function
 import sys
 import re
+import unicodedata
 from pyspark import SparkContext
 from pyspark.streaming import StreamingContext
 from pyspark.streaming.kafka import KafkaUtils
 from operator import add
 import json
 
+sc = SparkContext()
+
 ssc = StreamingContext(sc, 3)
 
-kvs = KafkaUtils.createDirectStream(ssc, ["iotsimineuron"], {"metadata.broker.list": "172.18.0.2:6667"})
+kvs = KafkaUtils.createDirectStream(ssc, ["mytopic"], {'bootstrap.servers':'localhost:9092'})
 
 # Read in the Kafka Direct Stream into a TransformedDStream
-jsonRDD = kvs.map(lambda (k,v): json.loads(v))
+jsonRDD = kvs.map(lambda k,v: json.loads(v))
 
 
 ##### Processing #####
@@ -27,7 +30,7 @@ sortedTemp.pprint(num=100000)
 # total number of messages
 messageCount = jsonRDD.map(lambda x: 1) \
                      .reduce(add) \
-                     .map(lambda x: "Total number of messages: "+ unicode(x))
+                     .map(lambda x: "Total number of messages: "+ unicodedata(x))
 messageCount.pprint()
 
 
@@ -44,7 +47,7 @@ sensorCount = jsonRDD.map(lambda x: (x['guid'], 1)) \
                      .reduceByKey(lambda a,b: a*b) \
                      .map(lambda x: 1) \
                      .reduce(add) \
-                     .map(lambda x: "Total number of sensors: " + unicode(x))
+                     .map(lambda x: "Total number of sensors: " + unicodedata(x))
 sensorCount.pprint(num=10000)
 
 
